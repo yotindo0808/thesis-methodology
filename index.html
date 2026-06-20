@@ -53,10 +53,27 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Loading Spinner */
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 3px solid #c08457;
+            width: 24px;
+            height: 24px;
+            -webkit-animation: spin 1s linear infinite; /* Safari */
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .bg-accent { background-color: #f4ece4; }
         .text-primary { color: #8c6a5a; }
         .border-primary { border-color: #d8c3b4; }
-        .bg-primary { background-color: #8c6a5a; }
     </style>
 </head>
 <body class="antialiased">
@@ -69,6 +86,7 @@
                 <button onclick="switchTab('collection')" class="nav-link" id="nav-collection">資料蒐集</button>
                 <button onclick="switchTab('analysis')" class="nav-link" id="nav-analysis">分析程序</button>
                 <button onclick="switchTab('ethics')" class="nav-link" id="nav-ethics">倫理守則</button>
+                <!-- 新增：AI 互動編碼分頁按鈕 -->
                 <button onclick="switchTab('ai-coding')" class="nav-link text-amber-600 font-bold" id="nav-ai-coding">✨ AI 編碼實作</button>
             </div>
         </div>
@@ -76,74 +94,515 @@
 
     <main class="max-w-5xl mx-auto px-6 py-12">
         
-        <!-- (其他部分省略，為了精簡檔案，這裡包含您原本的區塊) -->
+        <section id="overview" class="tab-content active">
+            <div class="mb-12 text-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">雙軌並行的研究設計</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">本研究探討媒體再現與閱聽人解讀間的互動關係，採質性取向，透過「媒體文本」與「閱聽人訪談」兩大軌道，揭示社會建構的 ASD 形象。</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="p-8 bg-white border border-primary rounded-2xl">
+                    <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mb-6">
+                        <span class="text-xl">📺</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">媒體文本分析軌道</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed mb-4">運用「混合式主題分析法」，結合演繹式（預設框架）與歸納式（新興意義）編碼，深入剖析 6 部具代表性的影視作品片段。</p>
+                    <ul class="text-sm space-y-2 text-gray-700">
+                        <li>• 演繹架構：A-F 六大再現概念類目</li>
+                        <li>• 歸納深度：描述性編碼記錄互動脈絡</li>
+                    </ul>
+                </div>
+                <div class="p-8 bg-white border border-primary rounded-2xl">
+                    <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mb-6">
+                        <span class="text-xl">👥</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">閱聽人訪談軌道</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed mb-4">採「半結構式深度訪談」，邀請一般閱聽人（GA組）與 ASD 群體（AS組）共 6 名受訪者，進行歸納式分析以理解其主觀詮釋。</p>
+                    <ul class="text-sm space-y-2 text-gray-700">
+                        <li>• 受訪者類型：直接接觸 vs 媒介接觸</li>
+                        <li>• 分析核心：解讀立場與現實經驗連結</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="collection" class="tab-content">
+            <div class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">資料抽樣與工具建置</h2>
+                <p class="text-gray-600">透過精密的篩選基準（6R 原則）與數位管理系統（Notion/Excel），確保資料的代表性與分析的透明度。</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-10 items-center mb-16">
+                <div class="chart-container">
+                    <canvas id="sampleChart"></canvas>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">分析樣本分布</h3>
+                    <p class="text-sm text-gray-600 mb-4">本研究篩選 2018-2023 年間具高度社會關注度之作品。台韓作品各占 50%，涵蓋主角與配角設定，確保分析素材的文化接近性與多樣性。</p>
+                    <div class="bg-accent p-4 rounded-lg text-xs">
+                        <p class="font-bold mb-1 italic">樣本概況：</p>
+                        <p>台劇：天之蕉子、誰是被害者、神之鄉</p>
+                        <p>韓劇：精神病、禹英禑、浪漫速成班</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-xl font-bold mb-6 text-center">互動式 6R 篩選基準</h3>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-16">
+                <div class="p-4 bg-white border border-primary rounded-xl text-center cursor-help group relative">
+                    <span class="block font-bold text-primary group-hover:hidden">Realness</span>
+                    <span class="hidden group-hover:block text-xs font-bold text-primary">真實性</span>
+                    <p class="text-xs text-gray-500 mt-2 hidden group-hover:block">片段具體呈現行為、情緒或主觀經驗</p>
+                </div>
+                <div class="p-4 bg-white border border-primary rounded-xl text-center cursor-help group">
+                    <span class="block font-bold text-primary group-hover:hidden">Richness</span>
+                    <span class="hidden group-hover:block text-xs font-bold text-primary">豐富性</span>
+                    <p class="text-xs text-gray-500 mt-2 hidden group-hover:block">包含充足的對白、動作與敘事脈絡</p>
+                </div>
+                <div class="p-4 bg-white border border-primary rounded-xl text-center cursor-help group">
+                    <span class="block font-bold text-primary group-hover:hidden">Repetition</span>
+                    <span class="hidden group-hover:block text-xs font-bold text-primary">重複性</span>
+                    <p class="text-xs text-gray-500 mt-2 hidden group-hover:block">特徵或互動模式於作品中反覆出現</p>
+                </div>
+                <div class="p-4 bg-white border border-primary rounded-xl text-center cursor-help group">
+                    <span class="block font-bold text-primary group-hover:hidden">Rationale</span>
+                    <span class="hidden group-hover:block text-xs font-bold text-primary">合理性</span>
+                    <p class="text-xs text-gray-500 mt-2 hidden group-hover:block">與理論或既有 ASD 媒體再現文獻具備關聯</p>
+                </div>
+                <div class="p-4 bg-white border border-primary rounded-xl text-center cursor-help group">
+                    <span class="block font-bold text-primary group-hover:hidden">Repartee</span>
+                    <span class="hidden group-hover:block text-xs font-bold text-primary">交流性</span>
+                    <p class="text-xs text-gray-500 mt-2 hidden group-hover:block">呈現具意義的互動、回應與意義協商</p>
+                </div>
+                <div class="p-4 bg-white border border-primary rounded-xl text-center cursor-help group">
+                    <span class="block font-bold text-primary group-hover:hidden">Regal</span>
+                    <span class="hidden group-hover:block text-xs font-bold text-primary">重要性</span>
+                    <p class="text-xs text-gray-500 mt-2 hidden group-hover:block">對情節發展或 ASD 角色形象建構具重要作用</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="analysis" class="tab-content">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Braun & Clarke 主題分析程序</h2>
+                <p class="text-gray-600">遵循嚴謹的六步驟循環歷程。請切換下方按鈕查看媒體與訪談兩條軌道在各步驟的操作細節。</p>
+            </div>
+
+            <div class="flex justify-center space-x-4 mb-8">
+                <button onclick="toggleTrack('media')" id="btn-track-media" class="px-6 py-2 rounded-full bg-primary text-white text-sm font-bold shadow-md transition-colors duration-300">媒體文本分析歷程</button>
+                <button onclick="toggleTrack('interview')" id="btn-track-interview" class="px-6 py-2 rounded-full bg-white border border-primary text-primary text-sm font-bold transition-colors duration-300">訪談語料分析歷程</button>
+            </div>
+
+            <div id="steps-container" class="space-y-6">
+                <!-- Content will be injected by JS -->
+            </div>
+
+            <div class="mt-16 bg-white p-6 border border-primary rounded-2xl shadow-sm">
+                <h3 class="text-lg font-bold mb-6 text-primary">主題聚斂示例：以核心主題「差異性形象的類型化建構」為例</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left border-collapse">
+                        <thead>
+                            <tr class="bg-accent border-b border-primary">
+                                <th class="p-3 font-bold text-gray-700">代表性描述性編碼群組 (第一階段)</th>
+                                <th class="p-3 font-bold text-gray-700">相關演繹式類目 (中介統整)</th>
+                                <th class="p-3 font-bold text-gray-700">次主題 (第二階段)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                <td class="p-3 text-gray-600">固定服裝、空間秩序、視線迴避、肢體不協調、摀耳</td>
+                                <td class="p-3 text-gray-600">A 角色塑造、C 刻板印象、D 污名化</td>
+                                <td class="p-3 font-medium text-gray-800">外顯特徵的常態設定</td>
+                            </tr>
+                            <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                <td class="p-3 text-gray-600">超乎常人能力、功能性讚美、專業不可取代、能力換取寬容</td>
+                                <td class="p-3 text-gray-600">A 角色塑造、C 刻板印象、E 理解與支持</td>
+                                <td class="p-3 font-medium text-gray-800">天賦能力的工具化價值</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="bg-gray-50 p-3 mt-4 rounded-lg border border-gray-200">
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        <span class="font-bold text-gray-700">註：</span>為具體呈現主題聚斂歷程，左欄僅列出各次主題具代表性之描述性編碼群組；中欄之「相關演繹式類目」則由細項編碼（a1 至 f3）向上統整為主要概念類目（A 至 F），以對應次主題之分析層次。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="ethics" class="tab-content">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-2xl font-bold text-gray-800 mb-8 text-center">研究倫理與結果整合</h2>
+                
+                <div class="space-y-8">
+                    <div class="flex items-start space-x-4 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                        <div class="text-3xl">📝</div>
+                        <div>
+                            <h4 class="font-bold text-primary mb-2 text-lg">知情同意與自願參與</h4>
+                            <p class="text-sm text-gray-600 leading-relaxed">所有受訪者均簽署知情同意書。針對 ASD 群體，研究者依受訪者的個別需求調整說明方式與訪談節奏，並於必要時提供休息。強調參與者有權隨時退出研究且不會受到任何負面影響。</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                        <div class="text-3xl">🔒</div>
+                        <div>
+                            <h4 class="font-bold text-primary mb-2 text-lg">匿名性與資料安全</h4>
+                            <p class="text-sm text-gray-600 leading-relaxed">逐字稿採去識別化處理，移除可辨識身分之資訊，改以代號（如 GA01, AS01）呈現。原始錄音檔與逐字稿僅限研究者存取，並承諾於論文審查通過後銷毀。</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                        <div class="text-3xl">⚖️</div>
+                        <div>
+                            <h4 class="font-bold text-primary mb-2 text-lg">綜合分析與跨來源詮釋</h4>
+                            <p class="text-sm text-gray-600 leading-relaxed">媒體文本與訪談資料分別完成主題分析後，建立跨資料來源比較表。著重檢視媒體文本所建構的角色特徵與互動模式，如何進入閱聽人的認知歷程，以及受訪者基於自身經驗所展現的主動性詮釋。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="ai-coding" class="tab-content">
             <div class="mb-8 text-center">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">✨ AI 質性研究助理：初始編碼模擬</h2>
                 <p class="text-gray-600 max-w-2xl mx-auto text-sm">
-                    請在下方貼上您欲分析的媒體文本或訪談逐字稿，AI 將直接依據本研究之「A至F再現概念類目」為您進行分析。
+                    體驗本研究「階段一：建立初始編碼」的過程。請貼上一段文本，由 Gemini AI 依據本研究的方法論框架，為您提供演繹式（預設概念 A-F）與歸納式（描述性特徵）的編碼建議。
                 </p>
             </div>
 
-            <div class="max-w-3xl mx-auto bg-white border border-primary rounded-2xl p-8 mb-8 shadow-sm">
-                <textarea id="ai-text-input" rows="6" class="w-full p-4 border border-primary rounded-xl mb-4 bg-gray-50" placeholder="請在此貼上分析文本..."></textarea>
-                <button onclick="submitToAI()" id="ai-submit-btn" class="w-full bg-primary hover:bg-[#7a5b4c] text-white py-3 rounded-xl transition-all duration-300 font-bold text-lg shadow-lg">
-                    🚀 開始 AI 分析
-                </button>
-                
-                <div id="ai-result-output" class="mt-8 p-6 bg-amber-50 rounded-xl border border-amber-200 text-gray-800 leading-relaxed min-h-[100px] hidden">
-                    <!-- 結果將顯示在這裡 -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- 左側：輸入區 -->
+                <div class="bg-white p-6 rounded-2xl border border-primary shadow-sm flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <label class="font-bold text-gray-700">資料來源選擇：</label>
+                        <select id="ai-track-select" class="border border-gray-300 rounded-md p-1 text-sm focus:outline-none focus:border-primary" onchange="populateSampleText()">
+                            <option value="media">📺 媒體文本 (劇本片段)</option>
+                            <option value="interview">👥 訪談語料 (逐字稿)</option>
+                        </select>
+                    </div>
+                    
+                    <label class="font-bold text-gray-700 mb-2 text-sm">請輸入分析素材：</label>
+                    <textarea id="ai-input-text" class="w-full flex-grow p-4 border border-gray-300 rounded-xl mb-4 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm" rows="8" placeholder="請貼上對白片段或受訪者逐字稿..."></textarea>
+                    
+                    <div class="flex space-x-3 mt-auto">
+                        <button onclick="runGeminiAnalysis()" id="btn-analyze" class="flex-1 bg-primary text-white py-3 rounded-xl font-bold hover:bg-[#7a5b4c] transition-colors flex justify-center items-center">
+                            <span>開始分析</span>
+                        </button>
+                        <button onclick="clearAiInput()" class="px-4 py-3 border border-gray-300 text-gray-600 rounded-xl font-bold hover:bg-gray-50 transition-colors text-sm">清空</button>
+                    </div>
                 </div>
+
+                <!-- 右側：輸出結果區 -->
+                <div class="bg-accent p-6 rounded-2xl border border-primary shadow-sm relative overflow-y-auto max-h-[500px]">
+                    <h3 class="font-bold text-primary mb-4 border-b border-primary/30 pb-2">編碼結果建議</h3>
+                    
+                    <!-- Loading State -->
+                    <div id="ai-loading" class="hidden absolute inset-0 bg-accent/80 flex flex-col items-center justify-center rounded-2xl z-10">
+                        <div class="loader mb-4"></div>
+                        <p class="text-sm text-primary font-medium">AI 正在進行混合式主題分析...</p>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="ai-empty-state" class="text-center text-gray-400 mt-12">
+                        <p class="text-4xl mb-3">🧩</p>
+                        <p class="text-sm">尚未進行分析。<br>請在左側輸入文本並點擊開始。</p>
+                    </div>
+
+                    <!-- Result Container -->
+                    <div id="ai-result-container" class="hidden space-y-6">
+                        <!-- 演繹式編碼 (僅媒體軌道顯示) -->
+                        <div id="result-deductive-section">
+                            <h4 class="text-sm font-bold text-gray-700 mb-2 flex items-center">
+                                <span class="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
+                                演繹式編碼 (Top-Down)
+                            </h4>
+                            <div id="result-deductive-tags" class="flex flex-wrap gap-2">
+                                <!-- Tags injected here -->
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2 ml-4">對應既有文獻之 A-F 重大概念類目。</p>
+                        </div>
+
+                        <!-- 歸納式編碼 -->
+                        <div>
+                            <h4 class="text-sm font-bold text-gray-700 mb-2 flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                                歸納式描述性編碼 (Bottom-Up)
+                            </h4>
+                            <div id="result-inductive-tags" class="flex flex-wrap gap-2">
+                                <!-- Tags injected here -->
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2 ml-4">擷取資料中的具體行為、特徵或解讀立場。</p>
+                        </div>
+
+                        <!-- 分析理由 -->
+                        <div class="bg-white p-4 rounded-xl border border-gray-200">
+                            <h4 class="text-sm font-bold text-gray-700 mb-2">💡 分析脈絡與理由</h4>
+                            <p id="result-rationale" class="text-sm text-gray-600 leading-relaxed"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4 text-center">
+                <p class="text-xs text-gray-400">聲明：本功能使用 Google Gemini API，輸出結果僅為模擬示範，實際學術研究需由研究者親自反覆檢視並建立編碼信度。</p>
             </div>
         </section>
 
     </main>
 
     <script>
-        // 您的 gas 部署網址
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbx_XWjSZ3mqgM8POx-yGmXJ0I9rObD3alXtxxvldnYz6krRHuxzFUI5JJ70Vbx7JUW8/exec";
+        // State Management for Thematic Analysis Steps
+        let currentTrack = 'media';
 
-        async function submitToAI() {
-            const input = document.getElementById('ai-text-input').value;
-            const outputDiv = document.getElementById('ai-result-output');
-            const btn = document.getElementById('ai-submit-btn');
+        const thematicData = {
+            media: [
+                { step: "1", title: "熟悉資料與建立片段", detail: "依 6R 原則篩選具意義場景（如家庭、公共空間），轉錄對白與肢體語言，最終保留 120 個分析片段存入 Notion。" },
+                { step: "2", title: "建立初始編碼", detail: "採取「演繹與歸納雙軌並行」。演繹端以 A-F 類目（a1-f3）標記；歸納端記錄行為特徵、情緒與互動脈絡。" },
+                { step: "3", title: "搜尋與形成初步主題", detail: "運用 Notion 聚集相近的歸納編碼，導出 Excel 進行跨作品比較，確認既有概念如何具體呈現於文本中。" },
+                { step: "4", title: "審查主題", detail: "對照原始片段檢視一致性與區隔性。內容重疊者合併，與主題關聯弱之編碼重新歸類，確保能回應研究問題。" },
+                { step: "5", title: "定義與命名主題", detail: "釐清核心現象。確立「差異性形象的類型化建構」等三項核心主題，並建立編碼群組至核心主題的聚斂邏輯。" },
+                { step: "6", title: "撰寫分析結果", detail: "選取具代表性片段作為證據。正文依序呈現分析判斷、文本證據與再現意義，保持透明的追溯關係。" }
+            ],
+            interview: [
+                { step: "1", title: "熟悉資料", detail: "將訪談錄音如實轉錄為去識別化逐字稿。反覆閱讀每位受訪者（GA/AS組）的完整語料，記錄主要解讀立場。" },
+                { step: "2", title: "建立初始編碼", detail: "依語意與談話脈絡劃分語料單位。記錄受訪者如何辨識角色、評價再現，以及如何連結個人真實生活經驗。" },
+                { step: "3", title: "搜尋主題", detail: "運用 Notion 進行組內與組間（GA vs AS）比較。將具有共同分析焦點的初始編碼聚集為候選次主題。" },
+                { step: "4", title: "審查主題", detail: "檢視主題內部焦點的一致性。保留與大趨勢不同的特異意見，以如實呈現閱聽人解讀的多樣性與差異落差。" },
+                { step: "5", title: "定義與命名主題", detail: "整合為核心主題，命名需能精準呈現受訪者的解讀立場。例如確立「類型化再現的接收與反思」等主題。" },
+                { step: "6", title: "撰寫分析報告", detail: "選取能支持分析判斷的代表性語料作為證據，並以受訪者代碼（如 GA01）標示來源，詳實描述決策點。" }
+            ]
+        };
 
-            if (!input) {
-                alert("請先輸入文本！");
-                return;
+        const sampleTexts = {
+            media: "禹英禑當眾糾正資深律師對法條的含糊陳述並示範正確宣讀，過程中無視辦公室內的層級氛圍，堅持要立刻釐清法條細節，因而遭到上司嚴厲喝斥與同事側目。（K2，ep15，00:30:18）",
+            interview: "「記憶力非常好、邏輯也很好⋯⋯像劇裡念過的書可以直接一字不漏背出來⋯⋯我覺得這真的是天才了。不過現實生活中遇到的好像沒這麼厲害就是了。」（GA02）"
+        };
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('nav-active');
+                if(link.id !== 'nav-ai-coding') link.classList.remove('text-amber-600', 'font-bold');
+            });
+            
+            document.getElementById(tabId).classList.add('active');
+            
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            activeNav.classList.add('nav-active');
+            if(tabId !== 'nav-ai-coding') activeNav.classList.remove('text-amber-600');
+        }
+
+        function toggleTrack(track) {
+            currentTrack = track;
+            const mediaBtn = document.getElementById('btn-track-media');
+            const interviewBtn = document.getElementById('btn-track-interview');
+
+            if(track === 'media') {
+                mediaBtn.classList.replace('bg-white', 'bg-primary');
+                mediaBtn.classList.replace('text-primary', 'text-white');
+                interviewBtn.classList.replace('bg-primary', 'bg-white');
+                interviewBtn.classList.replace('text-white', 'text-primary');
+            } else {
+                interviewBtn.classList.replace('bg-white', 'bg-primary');
+                interviewBtn.classList.replace('text-primary', 'text-white');
+                mediaBtn.classList.replace('bg-primary', 'bg-white');
+                mediaBtn.classList.replace('text-white', 'text-primary');
             }
+            renderSteps();
+        }
 
-            outputDiv.classList.remove('hidden');
-            outputDiv.innerHTML = "🤖 AI 正在深入分析文本中，請稍候...";
-            btn.disabled = true;
-            btn.innerText = "分析中...";
+        function renderSteps() {
+            const container = document.getElementById('steps-container');
+            container.innerHTML = '';
+            
+            thematicData[currentTrack].forEach(item => {
+                const stepEl = document.createElement('div');
+                stepEl.className = 'step-card flex items-start space-x-6 bg-white p-6 rounded-xl border border-gray-100 shadow-sm';
+                stepEl.innerHTML = `
+                    <div class="flex-shrink-0 w-10 h-10 bg-accent text-primary rounded-full flex items-center justify-center font-bold text-lg">
+                        ${item.step}
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800 mb-2">${item.title}</h4>
+                        <p class="text-sm text-gray-500 leading-relaxed">${item.detail}</p>
+                    </div>
+                `;
+                container.appendChild(stepEl);
+            });
+        }
 
-            try {
-                const response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    body: JSON.stringify({ text: input })
-                });
-
-                const data = await response.json();
-                
-                if (data.success) {
-                    outputDiv.innerHTML = `<h4 class="font-bold mb-2">分析結果：</h4>` + data.reply.replace(/\n/g, '<br>');
-                } else {
-                    outputDiv.innerHTML = "❌ 發生錯誤：" + data.error;
+        function initCharts() {
+            const ctx = document.getElementById('sampleChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['台灣電視劇', '韓國電視劇'],
+                    datasets: [{
+                        label: '分析樣本數量',
+                        data: [3, 3],
+                        backgroundColor: ['#d8c3b4', '#8c6a5a'],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { backgroundColor: '#4a3f35' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, max: 5, ticks: { stepSize: 1 } },
+                        x: { grid: { display: false } }
+                    }
                 }
-            } catch (err) {
-                outputDiv.innerHTML = "❌ 無法連接至後端伺服器，請稍後再試。" + err;
-            } finally {
-                btn.disabled = false;
-                btn.innerText = "🚀 開始 AI 分析";
+            });
+        }
+
+        function populateSampleText() {
+            const track = document.getElementById('ai-track-select').value;
+            const textarea = document.getElementById('ai-input-text');
+            textarea.value = sampleTexts[track];
+            clearAiResult();
+        }
+
+        function clearAiInput() {
+            document.getElementById('ai-input-text').value = '';
+            clearAiResult();
+        }
+
+        function clearAiResult() {
+            document.getElementById('ai-empty-state').classList.remove('hidden');
+            document.getElementById('ai-result-container').classList.add('hidden');
+            document.getElementById('result-deductive-tags').innerHTML = '';
+            document.getElementById('result-inductive-tags').innerHTML = '';
+            document.getElementById('result-rationale').innerText = '';
+            document.getElementById('result-deductive-section').style.display = 'block';
+        }
+
+        function createTagHTML(text, type) {
+            const baseClass = "px-3 py-1 rounded-full text-xs font-bold shadow-sm border";
+            if (type === 'deductive') {
+                return `<span class="${baseClass} bg-blue-50 text-blue-700 border-blue-200">${text}</span>`;
+            } else {
+                return `<span class="${baseClass} bg-green-50 text-green-700 border-green-200">${text}</span>`;
             }
         }
 
-        // 其他原本的 js 函數 (switchTab, initCharts 等) 請保留在下方
-        function switchTab(tabId) { /* ...原本的切換邏輯... */ }
-        // ... 其他原本的邏輯 ...
+        async function runGeminiAnalysis() {
+            const textInput = document.getElementById('ai-input-text').value.trim();
+            const track = document.getElementById('ai-track-select').value;
+            
+            if (!textInput) {
+                // Inline UI feedback instead of alert
+                const btn = document.getElementById('btn-analyze');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<span>請先輸入文本！</span>';
+                btn.classList.replace('bg-primary', 'bg-red-500');
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.replace('bg-red-500', 'bg-primary');
+                }, 2000);
+                return;
+            }
+
+            // UI Loading state
+            document.getElementById('ai-empty-state').classList.add('hidden');
+            document.getElementById('ai-result-container').classList.add('hidden');
+            document.getElementById('ai-loading').classList.remove('hidden');
+
+            const deductiveInstruction = track === 'media' ? 
+                `1. 演繹式編碼 (Deductive): 請對照下列類目標記適合的細項 (可多選):
+                 - A角色塑造 (視覺標籤、行為儀式、功能特質)
+                 - B敘事焦點 (自我認同、家庭與親密關係、社會參與)
+                 - C刻板印象 (不凡能力、社交障礙、無情冷漠)
+                 - D污名化 (他者化、依賴形象、潛在威脅)
+                 - E理解與支持 (自我倡議、互動回饋、社會支持)
+                 - F誤解與困境 (錯誤資訊、互動挫折、社會排斥)
+                 格式為 "類別代碼-細項"，例如 "A2-行為儀式" 或 "C2-社交障礙"。\n` : `1. 演繹式編碼: 訪談語料不需要演繹式編碼，請回傳空陣列。\n`;
+
+            const systemPrompt = `你現在是一位社會科學質性研究專家，正在使用 Braun & Clarke 的主題分析法協助進行「初始編碼」(階段一)。
+            本研究主題為「自閉症(ASD)的媒體再現與閱聽人解讀」。
+            請針對使用者提供的文本片段，給予專業的編碼建議。
+
+            ${deductiveInstruction}
+            2. 歸納式描述性編碼 (Inductive): 請萃取 2 到 4 個簡短詞組 (如: 堅持細節、無視階級、能力崇拜、反思現實落差等)，捕捉文本中的具體特徵、行為、情緒或受訪者的解讀立場。
+            3. 分析脈絡與理由: 以一段話(約 50-80 字)解釋為何給予上述編碼。`;
+
+            const payload = {
+                contents: [{ parts: [{ text: `軌道類型：${track === 'media' ? '媒體劇本' : '受訪者逐字稿'}\n文本內容：\n${textInput}` }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            "deductiveCodes": {
+                                type: "ARRAY",
+                                items: { type: "STRING" }
+                            },
+                            "inductiveCodes": {
+                                type: "ARRAY",
+                                items: { type: "STRING" }
+                            },
+                            "rationale": {
+                                type: "STRING"
+                            }
+                        },
+                        required: ["deductiveCodes", "inductiveCodes", "rationale"]
+                    }
+                }
+            };
+
+            const apiKey = ""; // Handled by environment
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                
+                if (result.candidates && result.candidates.length > 0) {
+                    const jsonString = result.candidates[0].content.parts[0].text;
+                    const parsedData = JSON.parse(jsonString);
+
+                    // Update UI with results
+                    document.getElementById('result-rationale').innerText = parsedData.rationale;
+                    
+                    const indContainer = document.getElementById('result-inductive-tags');
+                    indContainer.innerHTML = parsedData.inductiveCodes.map(code => createTagHTML(code, 'inductive')).join('');
+
+                    const dedContainer = document.getElementById('result-deductive-tags');
+                    const dedSection = document.getElementById('result-deductive-section');
+                    
+                    if (track === 'media' && parsedData.deductiveCodes && parsedData.deductiveCodes.length > 0) {
+                        dedSection.style.display = 'block';
+                        dedContainer.innerHTML = parsedData.deductiveCodes.map(code => createTagHTML(code, 'deductive')).join('');
+                    } else {
+                        dedSection.style.display = 'none';
+                    }
+
+                    document.getElementById('ai-result-container').classList.remove('hidden');
+                } else {
+                    document.getElementById('result-rationale').innerText = "API 未回傳有效結果，請重試。";
+                    document.getElementById('ai-result-container').classList.remove('hidden');
+                }
+
+            } catch (error) {
+                console.error("API 呼叫錯誤:", error);
+                document.getElementById('result-rationale').innerText = "發生錯誤，無法連線至 AI 服務。請稍後再試。";
+                document.getElementById('ai-result-container').classList.remove('hidden');
+            } finally {
+                document.getElementById('ai-loading').classList.add('hidden');
+            }
+        }
+
+        window.onload = () => {
+            renderSteps();
+            initCharts();
+            populateSampleText(); // 預設載入範例文本
+        };
     </script>
 </body>
 </html>
-```
