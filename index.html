@@ -2,67 +2,119 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>研究方法論互動導覽</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>研究方法與分析程序互動導覽</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fdfaf7; color: #4a3f35; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin: 0 auto; height: 300px; }
+        .step-card { transition: all 0.3s ease; }
+        .step-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .nav-link { cursor: pointer; padding-bottom: 0.5rem; transition: all 0.3s; }
+        .nav-active { border-bottom: 3px solid #c08457; color: #c08457; font-weight: 700; }
         .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .nav-active { border-bottom: 3px solid #c08457; color: #c08457; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
-<body class="bg-[#fdfaf7] text-[#4a3f35] antialiased">
-    <nav class="sticky top-0 bg-white/80 backdrop-blur-md border-b border-primary p-6">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold">研究方法論互動導覽</h1>
-            <div class="flex gap-4">
+<body class="antialiased">
+
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-[#d8c3b4]">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center">
+            <h1 class="text-xl font-bold text-[#8c6a5a] mb-4 md:mb-0">研究方法論互動導覽</h1>
+            <div class="flex flex-wrap justify-center gap-6 text-sm font-medium">
                 <button onclick="switchTab('overview')" class="nav-link nav-active" id="nav-overview">研究取向</button>
-                <button onclick="switchTab('ai-coding')" class="nav-link text-amber-600 font-bold" id="nav-ai-coding">✨ AI 編碼實作</button>
+                <button onclick="switchTab('collection')" class="nav-link" id="nav-collection">資料蒐集</button>
+                <button onclick="switchTab('analysis')" class="nav-link" id="nav-analysis">分析程序</button>
+                <button onclick="switchTab('ethics')" class="nav-link" id="nav-ethics">倫理守則</button>
+                <button onclick="switchTab('ai-coding')" class="nav-link text-amber-700" id="nav-ai-coding">✨ AI 編碼實作</button>
             </div>
         </div>
     </nav>
 
     <main class="max-w-5xl mx-auto px-6 py-12">
+        <!-- 概覽 -->
         <section id="overview" class="tab-content active">
-            <h2 class="text-3xl font-bold mb-6">研究取向</h2>
-            <p>請將您原本的導覽內容放在這裡...</p>
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">雙軌並行的研究設計</h2>
+            <p class="text-lg leading-relaxed">本研究透過媒體文本分析與閱聽人訪談，深度探討媒體再現與閱聽人解讀之間的互動關係。</p>
         </section>
 
+        <!-- 資料蒐集 -->
+        <section id="collection" class="tab-content">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">資料抽樣與工具建置</h2>
+            <div class="chart-container"><canvas id="sampleChart"></canvas></div>
+        </section>
+
+        <!-- 分析程序 -->
+        <section id="analysis" class="tab-content">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">分析程序</h2>
+            <div id="steps-container" class="grid md:grid-cols-2 gap-6"></div>
+        </section>
+
+        <!-- 倫理守則 -->
+        <section id="ethics" class="tab-content">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">倫理守則</h2>
+            <p>確保研究過程中的知情同意與隱私保護。</p>
+        </section>
+
+        <!-- AI 編碼實作 -->
         <section id="ai-coding" class="tab-content">
-            <div class="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-sm border">
-                <textarea id="ai-text-input" rows="6" class="w-full p-4 border rounded-xl mb-4 bg-gray-50" placeholder="貼上文本..."></textarea>
-                <button onclick="submitToAI()" id="ai-submit-btn" class="w-full bg-[#8c6a5a] text-white py-3 rounded-xl font-bold">🚀 開始 AI 分析</button>
-                <div id="ai-result-output" class="mt-8 p-6 bg-amber-50 rounded-xl hidden"></div>
+            <div class="max-w-3xl mx-auto bg-white border border-[#d8c3b4] rounded-2xl p-8 shadow-sm">
+                <h2 class="text-2xl font-bold mb-6 text-center text-[#8c6a5a]">✨ AI 質性研究助理</h2>
+                <textarea id="ai-text-input" rows="6" class="w-full p-4 border border-gray-200 rounded-xl mb-4 bg-gray-50 outline-none focus:ring-2 focus:ring-amber-200" placeholder="請貼上待分析文本..."></textarea>
+                <button onclick="submitToAI()" id="ai-submit-btn" class="w-full bg-[#8c6a5a] text-white py-3 rounded-xl font-bold hover:bg-[#7a5b4c] transition-all">🚀 開始 AI 分析</button>
+                <div id="ai-loading" class="hidden text-center mt-4 text-amber-700 font-bold italic">🤖 正在讀取 AI 分析結果...</div>
+                <div id="ai-result-container" class="mt-8 p-6 bg-amber-50 rounded-xl border border-amber-200 hidden">
+                    <h4 class="font-bold mb-2 text-amber-900">分析結果：</h4>
+                    <div id="ai-result-output" class="text-gray-800 leading-relaxed"></div>
+                </div>
             </div>
         </section>
     </main>
 
     <script>
-        // 請將您從 Google Apps Script 拿到的網址貼在這裡
         const GAS_URL = "https://script.google.com/macros/s/AKfycbx_XWjSZ3mqgM8POx-yGmXJ0I9rObD3alXtxxvldnYz6krRHuxzFUI5JJ70Vbx7JUW8/exec";
 
-        function switchTab(id) {
+        function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('nav-active'));
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('nav-' + tabId).classList.add('nav-active');
         }
 
         async function submitToAI() {
-            const outputDiv = document.getElementById('ai-result-output');
             const input = document.getElementById('ai-text-input').value;
-            outputDiv.innerHTML = "🤖 分析中...";
-            outputDiv.classList.remove('hidden');
-
+            if (!input.trim()) return alert("請輸入文本！");
+            
+            document.getElementById('ai-loading').classList.remove('hidden');
+            document.getElementById('ai-result-container').classList.add('hidden');
+            
             try {
                 const response = await fetch(GAS_URL, {
-                    method: 'POST',
-                    mode: 'cors',
+                    method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ text: input })
                 });
                 const data = await response.json();
-                outputDiv.innerHTML = data.reply.replace(/\n/g, '<br>');
-            } catch (err) {
-                outputDiv.innerHTML = "❌ 連線錯誤，請確認 GAS 是否部署。";
-            }
+                document.getElementById('ai-result-output').innerHTML = data.reply ? data.reply.replace(/\n/g, '<br>') : "無回應";
+                document.getElementById('ai-result-container').classList.remove('hidden');
+            } catch (err) { alert("連線錯誤：" + err); } 
+            finally { document.getElementById('ai-loading').classList.add('hidden'); }
         }
+
+        function renderSteps() {
+            const container = document.getElementById('steps-container');
+            const steps = [{t: "資料收集", d: "說明採樣原則與6R原則"}, {t: "分析程序", d: "Braun & Clarke主題分析法"}];
+            container.innerHTML = steps.map(s => `<div class="step-card p-6 bg-white border border-gray-100 rounded-xl shadow-sm"><h3 class="font-bold text-lg mb-2">${s.t}</h3><p class="text-gray-600">${s.d}</p></div>`).join('');
+        }
+
+        function initCharts() {
+            const ctx = document.getElementById('sampleChart');
+            if(ctx) new Chart(ctx.getContext('2d'), { type: 'bar', data: { labels: ['台灣', '韓國'], datasets: [{ label: '樣本數', data: [3, 3], backgroundColor: '#c08457' }] }});
+        }
+
+        window.onload = () => { renderSteps(); initCharts(); };
     </script>
 </body>
 </html>
